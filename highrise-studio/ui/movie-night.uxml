@@ -1,0 +1,6 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:hr="Highrise.UIElements">
+  <hr:UI class="movie-night-panel">
+    <hr:UILabel name="CountdownLabel" class="countdown" text="No show scheduled" />
+    <hr:UILabel name="MovieLabel" class="movie-title" text="" />
+  </hr:UI>
+</ui:UXML>

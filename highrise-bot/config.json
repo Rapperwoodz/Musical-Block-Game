@@ -1,0 +1,40 @@
+{
+  "room": {
+    "blockSize": 1.0,
+    "spawn": { "x": 10.0, "y": 0.0, "z": 10.0 },
+    "spectator": { "x": 2.0, "y": 0.0, "z": 2.0 }
+  },
+  "blocks": [
+    { "id": "green1",  "color": "green",  "x": 7,  "z": 6 },
+    { "id": "orange1", "color": "orange", "x": 7,  "z": 8 },
+    { "id": "yellow1", "color": "yellow", "x": 9,  "z": 6 },
+    { "id": "purple1", "color": "purple", "x": 8,  "z": 12 },
+    { "id": "teal1",   "color": "teal",   "x": 9,  "z": 11 },
+    { "id": "blue1",   "color": "blue",   "x": 11, "z": 9 },
+    { "id": "white1",  "color": "white",  "x": 13, "z": 8 },
+    { "id": "lime1",   "color": "lime",   "x": 9,  "z": 14 },
+    { "id": "gray1",   "color": "gray",   "x": 11, "z": 13 },
+    { "id": "red1",    "color": "red",    "x": 12, "z": 12 },
+    { "id": "tan1",    "color": "tan",    "x": 13, "z": 14 },
+    { "id": "black1",  "color": "black",  "x": 4,  "z": 11 }
+  ],
+  "modes": {
+    "easy":   { "safeCount": 7, "musicTime": 20, "checkTime": 10 },
+    "normal": { "safeCount": 5, "musicTime": 15, "checkTime": 7 },
+    "hard":   { "safeCount": 3, "musicTime": 10, "checkTime": 5 }
+  },
+  "settings": {
+    "defaultMode": "normal",
+    "revealMode": "mid",
+    "revealAfterSeconds": 6,
+    "requireFloor": true,
+    "rampEnabled": true,
+    "rampSafeStep": 1,
+    "minSafeCount": 1,
+    "timeRampPercent": 10,
+    "minMusicTime": 8,
+    "minCheckTime": 4,
+    "prizeText": "🏆 wins Musical Block! GG!",
+    "hosts": []
+  }
+}

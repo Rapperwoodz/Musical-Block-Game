@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<title>Virtual Movie Theater</title>
+<link rel="stylesheet" href="css/style.css"/>
+</head>
+<body>
+<div id="app">
+
+  <!-- THEATER -->
+  <canvas id="game"></canvas>
+
+  <!-- top bar -->
+  <div id="hud-top" class="hidden">
+    <div class="brand">VIRTUAL MOVIE THEATER</div>
+    <div id="online-count">0 online</div>
+    <button id="btn-play-top" class="chip play-chip" title="Play/Pause the movie">▶</button>
+    <button id="btn-full" class="chip" title="Fullscreen">⛶</button>
+    <button id="btn-logout" class="chip">Log out</button>
+  </div>
+
+  <div id="net-banner" class="banner hidden">Reconnecting…</div>
+  <div id="offline-banner" class="banner hidden">OFFLINE PREVIEW — demo films play locally; connect the server for multiplayer + chat</div>
+  <div id="movie-announce" class="banner announce hidden"></div>
+
+  <!-- zoom controls (drag to pan, pinch or these to zoom) -->
+  <div id="zoom-controls" class="hidden">
+    <button id="btn-zoom-in" class="fab small" aria-label="Zoom in">➕</button>
+    <button id="btn-zoom-out" class="fab small" aria-label="Zoom out">➖</button>
+  </div>
+
+  <!-- action cluster -->
+  <div id="hud-actions" class="hidden">
+    <button id="btn-chat" class="fab">💬</button>
+    <button id="btn-players" class="fab">👥</button>
+    <button id="btn-movies" class="fab">🎬</button>
+    <button id="btn-emote" class="fab">😊</button>
+    <button id="btn-snack" class="fab">🍿</button>
+  </div>
+
+  <!-- WELCOME -->
+  <section id="screen-welcome" class="screen">
+    <div class="card">
+      <div class="logo">
+        <span class="pop">🍿</span>
+        <h1>VIRTUAL MOVIE<br/>THEATER</h1>
+        <p>Watch movies with friends — together.</p>
+      </div>
+      <button id="btn-go-register" class="btn primary">Create Account</button>
+      <button id="btn-go-login" class="btn">Log In</button>
+      <button id="btn-preview" class="btn ghost">Preview the theater (offline)</button>
+      <div id="welcome-msg" class="form-msg"></div>
+    </div>
+  </section>
+
+  <!-- REGISTER -->
+  <section id="screen-register" class="screen hidden">
+    <div class="card">
+      <h2>Create your account</h2>
+      <label>Username<input id="reg-user" maxlength="20" autocomplete="username" placeholder="any name, 3-20 characters"/></label>
+      <label>Email <span class="opt">(optional — for password recovery)</span><input id="reg-email" type="email" autocomplete="email" placeholder="you@example.com"/></label>
+      <label>Password<input id="reg-pass" type="password" autocomplete="new-password" placeholder="8+ characters"/></label>
+      <label>Confirm password<input id="reg-pass2" type="password" autocomplete="new-password"/></label>
+      <div id="reg-err" class="form-msg error"></div>
+      <button id="reg-go" class="btn primary">Create Account</button>
+      <button id="reg-tologin" class="btn ghost">I already have an account</button>
+    </div>
+  </section>
+
+  <!-- LOGIN -->
+  <section id="screen-login" class="screen hidden">
+    <div class="card">
+      <h2>Welcome back</h2>
+      <label>Username or email<input id="log-id" autocomplete="username"/></label>
+      <label>Password<input id="log-pass" type="password" autocomplete="current-password"/></label>
+      <div id="log-err" class="form-msg error"></div>
+      <button id="log-go" class="btn primary">Log In</button>
+      <button id="log-forgot" class="btn ghost">Forgot password?</button>
+      <button id="log-toreg" class="btn ghost">Create a new account</button>
+    </div>
+  </section>
+
+  <!-- RECOVER -->
+  <section id="screen-recover" class="screen hidden">
+    <div class="card">
+      <h2>Recover account</h2>
+      <label>Email<input id="rec-email" type="email"/></label>
+      <button id="rec-go" class="btn primary">Send recovery code</button>
+      <div id="rec-msg" class="form-msg"></div>
+      <div id="rec-reset" class="hidden">
+        <label>Recovery code<input id="rec-token"/></label>
+        <label>New password<input id="rec-newpass" type="password"/></label>
+        <button id="rec-resetgo" class="btn primary">Set new password</button>
+      </div>
+      <button id="rec-back" class="btn ghost">Back to login</button>
+    </div>
+  </section>
+
+  <!-- AVATAR CREATOR -->
+  <section id="screen-avatar" class="screen hidden">
+    <div class="card wide">
+      <h2>Design your avatar</h2>
+      <canvas id="av-preview" width="300" height="300"></canvas>
+      <div class="av-name">Name: <span id="av-name"></span></div>
+      <div id="av-options"></div>
+      <div id="av-err" class="form-msg error"></div>
+      <button id="av-go" class="btn primary">Enter the Theater</button>
+      <button id="av-random" class="btn ghost">Randomize</button>
+    </div>
+  </section>
+
+  <!-- CHAT -->
+  <aside id="panel-chat" class="panel hidden">
+    <header>Room chat <button id="chat-close" class="chip">✕</button></header>
+    <div id="chat-log"></div>
+    <footer>
+      <input id="chat-input" maxlength="200" placeholder="Say something…"/>
+      <button id="chat-send" class="btn primary small">Send</button>
+    </footer>
+  </aside>
+
+  <!-- PLAYERS -->
+  <aside id="panel-players" class="panel hidden">
+    <header>Players <button id="players-close" class="chip">✕</button></header>
+    <div id="player-list"></div>
+  </aside>
+
+  <!-- MOVIES -->
+  <aside id="panel-movies" class="panel hidden">
+    <header>Movies <button id="movies-close" class="chip">✕</button></header>
+    <div id="host-panel" class="hidden">
+      <div class="panel-title">Host controls</div>
+      <div class="host-grid">
+        <button id="hp-play" class="btn small">Play</button>
+        <button id="hp-pause" class="btn small">Pause</button>
+        <button id="hp-resume" class="btn small">Resume</button>
+        <button id="hp-skip" class="btn small">Skip</button>
+        <button id="hp-announce" class="btn small wide">Announce next movie (60s)</button>
+      </div>
+    </div>
+    <div id="movie-list"></div>
+  </aside>
+
+  <!-- EMOTES -->
+  <aside id="panel-emotes" class="panel hidden">
+    <header>Emotes <button id="emotes-close" class="chip">✕</button></header>
+    <div class="emote-grid">
+      <button class="btn small" data-emote="👋">👋 Wave</button>
+      <button class="btn small" data-emote="❤️">❤️ Heart</button>
+      <button class="btn small" data-emote="😂">😂 Laugh</button>
+      <button class="btn small" data-emote="👏">👏 Clap</button>
+      <button class="btn small" data-emote="😴">😴 Sleepy</button>
+      <button class="btn small" data-emote="😱">😱 Wow</button>
+    </div>
+  </aside>
+
+  <!-- SNACKS -->
+  <aside id="panel-snack" class="panel hidden">
+    <header>Snacks <button id="snack-close" class="chip">✕</button></header>
+    <div class="emote-grid">
+      <button id="sn-popcorn" class="btn small">🍿 Hold popcorn</button>
+      <button id="sn-drink" class="btn small">🥤 Hold drink</button>
+      <button id="sn-none" class="btn small">✋ Put down</button>
+    </div>
+  </aside>
+
+  <!-- MODERATION -->
+  <aside id="panel-mod" class="panel hidden">
+    <header><span id="mod-name">Player</span> <button id="mod-close" class="chip">✕</button></header>
+    <div class="emote-grid">
+      <button id="mod-report" class="btn small">🚩 Report</button>
+      <button id="mod-block" class="btn small">🚫 Block</button>
+      <button id="mod-mute" class="btn small host-only hidden">🔇 Mute (host)</button>
+      <button id="mod-unmute" class="btn small host-only hidden">🔊 Unmute (host)</button>
+      <button id="mod-transfer" class="btn small host-only hidden">👑 Make host</button>
+    </div>
+  </aside>
+
+  <video id="movie-video" class="hidden" playsinline preload="auto"></video>
+</div>
+<script src="js/api.js"></script>
+<script src="js/net.js"></script>
+<script src="js/avatar.js"></script>
+<script src="js/theater.js"></script>
+<script src="js/ui.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>

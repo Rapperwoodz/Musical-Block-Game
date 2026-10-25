@@ -1,0 +1,30 @@
+[
+  {
+    "id": "big-buck-bunny",
+    "title": "Big Buck Bunny (CC-BY, Blender Foundation)",
+    "type": "file",
+    "src": "https://download.blender.org/peach/bigbuckbunny_movies/BigBuckBunny_640x360.m4v",
+    "note": "Creative Commons BY 3.0 — free to screen publicly with attribution."
+  },
+  {
+    "id": "sintel",
+    "title": "Sintel (CC-BY, Blender Foundation)",
+    "type": "file",
+    "src": "https://download.blender.org/durian/movies/Sintel.2010.720p.mp4",
+    "note": "Creative Commons BY 3.0 — free to screen publicly with attribution."
+  },
+  {
+    "id": "own-media",
+    "title": "Local media folder (server/media)",
+    "type": "folder",
+    "src": "/media/",
+    "note": "Drop MP4/WebM files you own or have rights to into server/media and they appear here."
+  },
+  {
+    "id": "peacock",
+    "title": "Peacock",
+    "type": "external",
+    "url": "https://www.peacocktv.com",
+    "note": "Peacock offers no authorized embed API for third-party games. This opens the official site in a new tab; come back to the theater afterwards."
+  }
+]
