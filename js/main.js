@@ -176,6 +176,7 @@
   function enterTheaterHud() {
     for (const id of ['screen-welcome', 'screen-register', 'screen-login', 'screen-recover', 'screen-avatar'])
       $(id).classList.add('hidden');
+    $('panel-docs').classList.add('hidden');
     UI.hud(true);
   }
 
@@ -455,6 +456,9 @@
     $('btn-preview').addEventListener('click', () => {
       enterTheater({ id: 0, username: 'Guest', avatar: window.AV.randomAvatar() }, true);
     });
+
+    $('btn-docs').addEventListener('click', () => UI.openDoc('quickstart'));
+    UI.initDocs();
   }
 
   /* ---------------- avatar creator ---------------- */

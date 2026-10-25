@@ -189,6 +189,101 @@
       }
       $('panel-mod').classList.remove('hidden');
     },
+
+    /* -------- docs viewer (renders project markdown files) -------- */
+    DOCS: {
+      quickstart: { title: 'Bot Setup — Musical Block', url: '/highrise-bot/QUICKSTART.md' },
+      bot:        { title: 'MUSICAL BLOCK Bot README',   url: '/highrise-bot/README.md' },
+      game:       { title: 'Virtual Movie Theater — README', url: '/README.md' },
+    },
+
+    mdToHtml(md) {
+      const escAll = (s) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+      // pull out fenced code blocks first (escape their contents for safe display)
+      const fences = [];
+      md = md.replace(/```([\s\S]*?)```/g, function (_, code) {
+        let body = code.replace(/^[a-zA-Z0-9#+_-]*\n/, '').replace(/^\n/, '').replace(/\n$/, '');
+        fences.push(escAll(body));
+        return '\x01' + (fences.length - 1) + '\x01';
+      });
+      md = escAll(md);
+      const inline = (s) => s
+        .replace(/`([^`]+)`/g, '<code>$1</code>')
+        .replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
+      const lines = md.split('\n');
+      let html = '', list = null;
+      const closeList = () => { if (list) { html += '</' + list + '>'; list = null; } };
+      const parseRow = (r) => r.replace(/^\|/, '').replace(/\|$/, '').split('|').map((s) => s.trim());
+      for (let i = 0; i < lines.length; i++) {
+        const raw = lines[i];
+        const m = raw.trim();
+        if (!m) { closeList(); continue; }
+        if (/^\x01\d+\x01$/.test(m)) {  // fenced block placeholder (whole block)
+          closeList();
+          html += '<pre class="doc-code"><code>' + fences[parseInt(m.slice(1, -1), 10)] + '\n</code></pre>';
+          continue;
+        }
+        const h = m.match(/^(#{1,4})\s+(.+)$/);
+        if (h) { closeList(); html += '<h' + h[1].length + '>' + inline(h[2]) + '</h' + h[1].length + '>'; continue; }
+        const ul = m.match(/^[-*]\s+(.+)$/);
+        const ol = m.match(/^\d+\.\s+(.+)$/);
+        if (ul || ol) {
+          const want = ul ? 'ul' : 'ol';
+          if (list !== want) { closeList(); list = want; html += '<' + want + '>'; }
+          html += '<li>' + inline(ul ? ul[1] : ol[1]) + '</li>';
+          continue;
+        }
+        closeList();
+        if (m.charAt(0) === '|') {
+          let j = i, rows = [];
+          while (j < lines.length && lines[j].trim().charAt(0) === '|') { rows.push(lines[j].trim()); j++; }
+          const header = parseRow(rows[0]);
+          const bodyRows = rows.slice(1).filter((r) => !/^\|?[\s:|-]+\|/.test(r));
+          html += '<table class="doc-table"><tr>';
+          header.forEach((c) => { html += '<th>' + inline(c) + '</th>'; });
+          html += '</tr>';
+          bodyRows.forEach((r) => {
+            html += '<tr>';
+            parseRow(r).forEach((c) => { html += '<td>' + inline(c) + '</td>'; });
+            html += '</tr>';
+          });
+          html += '</table>';
+          i = j - 1;
+          continue;
+        }
+        html += '<p>' + inline(m) + '</p>';
+      }
+      closeList();
+      return html;
+    },
+
+    async openDoc(key) {
+      const doc = this.DOCS[key];
+      if (!doc) return;
+      $('panel-docs').classList.remove('hidden');
+      $('docs-title').textContent = doc.title;
+      document.querySelectorAll('.doc-link').forEach((b) =>
+        b.classList.toggle('active', b.dataset.doc === key));
+      const body = $('docs-body');
+      body.textContent = 'Loading…';
+      try {
+        const res = await fetch(doc.url);
+        if (!res.ok) throw new Error('HTTP ' + res.status);
+        const md = await res.text();
+        body.innerHTML = this.mdToHtml(md);
+        body.scrollTop = 0;
+      } catch (err) {
+        body.innerHTML = '<p class="doc-error">Could not load “' + doc.title +
+          '” from the server (' + err.message + '). Start the game server ' +
+          '(<code>cd server && npm start</code>) and reopen the docs.</p>';
+      }
+    },
+
+    initDocs() {
+      $('docs-close').addEventListener('click', () => $('panel-docs').classList.add('hidden'));
+      document.querySelectorAll('.doc-link').forEach((b) =>
+        b.addEventListener('click', () => this.openDoc(b.dataset.doc)));
+    },
   };
 
   function esc(s) {

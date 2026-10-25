@@ -52,6 +52,7 @@
       <button id="btn-go-register" class="btn primary">Create Account</button>
       <button id="btn-go-login" class="btn">Log In</button>
       <button id="btn-preview" class="btn ghost">Preview the theater (offline)</button>
+      <button id="btn-docs" class="btn ghost">📖 Bot &amp; Game Docs</button>
       <div id="welcome-msg" class="form-msg"></div>
     </div>
   </section>
@@ -177,6 +178,17 @@
       <button id="mod-unmute" class="btn small host-only hidden">🔊 Unmute (host)</button>
       <button id="mod-transfer" class="btn small host-only hidden">👑 Make host</button>
     </div>
+  </aside>
+
+  <!-- DOCS -->
+  <aside id="panel-docs" class="panel hidden">
+    <header><span id="docs-title">Docs</span> <button id="docs-close" class="chip">✕</button></header>
+    <div id="docs-nav">
+      <button class="chip doc-link" data-doc="quickstart">Bot Setup</button>
+      <button class="chip doc-link" data-doc="bot">Bot README</button>
+      <button class="chip doc-link" data-doc="game">Game README</button>
+    </div>
+    <div id="docs-body"></div>
   </aside>
 
   <video id="movie-video" class="hidden" playsinline preload="auto"></video>

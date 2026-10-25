@@ -97,3 +97,23 @@ input:focus { outline: 2px solid var(--gold); border-color: transparent; }
 .panel-title { padding: 10px 14px 0; font-size: 12px; color: var(--gold); font-weight: 700; letter-spacing: 1px; }
 .host-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; padding: 8px 14px 10px; }
 .emote-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; padding: 12px; overflow-y: auto; touch-action: pan-y; }
+
+/* ---------- docs viewer ---------- */
+#docs-nav { display: flex; gap: 6px; padding: 10px 14px; border-bottom: 1px solid var(--line); overflow-x: auto; }
+.doc-link.active { background: var(--red); border-color: #e23948; color: #fff; }
+#docs-body { flex: 1; overflow-y: auto; padding: 14px 16px 30px; font-size: 14px; line-height: 1.55;
+  touch-action: pan-y; overflow-wrap: anywhere; }
+#docs-body h1, #docs-body h2 { font-size: 16px; margin: 14px 0 6px; color: var(--gold); }
+#docs-body h3, #docs-body h4 { font-size: 14px; margin: 12px 0 4px; }
+#docs-body p { margin: 6px 0; }
+#docs-body ul, #docs-body ol { margin: 6px 0 6px 18px; }
+#docs-body li { margin: 3px 0; }
+#docs-body .doc-code { background: #14151a; border: 1px solid var(--line); border-radius: 8px;
+  padding: 8px 10px; margin: 8px 0; overflow-x: auto; font-size: 12px; touch-action: pan-x; }
+#docs-body code { background: #14151a; padding: 1px 4px; border-radius: 4px; font-size: 13px; }
+#docs-body .doc-code code { padding: 0; background: none; }
+#docs-body table { border-collapse: collapse; margin: 8px 0; width: 100%; }
+#docs-body th, #docs-body td { border: 1px solid var(--line); padding: 5px 7px; font-size: 12px; text-align: left; }
+#docs-body th { color: var(--gold); }
+#docs-body .doc-error { color: #ff8b96; }
+#docs-body a { color: var(--gold); }
